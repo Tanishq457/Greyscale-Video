@@ -37,8 +37,6 @@ def createFrames(video):
             grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.imwrite('./temp/temp_frame_'+str(i) + '.jpg', grey)    
             
-            if cv2.waitKey(1) == ord('q'):
-                break
     except:
         print('Some Error Occured')
         cap.release()
