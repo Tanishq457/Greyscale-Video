@@ -72,6 +72,8 @@ def upload_files():
         f.save(fileName)
         if not filetype.video_match("./" + fileName):
             return "Given file is not a video file. Please give a video file."
+        print('wegyifbcwe::' + str(request.form['name']), file=sys.stderr)
+        TO_EMAIL = request.form['name']
         output = createFrames(fileName)
         print("output: " + str(output), file=sys.stderr)
         if output == None:
@@ -80,7 +82,7 @@ def upload_files():
         fps, width, height = output
         fileName2 = combineGreyFrames(fileName, width, height, fps)
 
-        send_mail(SENDER_EMAIL, SENDER_EMAIL, "Hi", "Hi There", [fileName2])
+        send_mail(SENDER_EMAIL, TO_EMAIL, "Hi", "Hi There", [fileName2])
         os.remove(fileName)
         os.remove(fileName2)
         return "File Emailed Successfully"
@@ -88,4 +90,4 @@ def upload_files():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
