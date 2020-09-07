@@ -1,50 +1,59 @@
 import cv2 
 import numpy as np
-import sys, importlib, os, glob, shutil, filetype 
+import sys, importlib, os, glob, shutil, filetype , sys
 
 
 def createFrames(video):
-    
     try:
-        os.mkdir('temp')
-    except:
-        print('Error creating directory temp')
-        return 
+        try:
+            os.mkdir('temp')
+        except:
+            print('Error creating directory temp', file=sys.stderr)
+            return 
 
-    cap = cv2.VideoCapture(video)
+        cap = cv2.VideoCapture(video)
+        print('Filename: ' + video, file=sys.stderr)
 
-    if not cap.isOpened():
-        print(f'Error Opening File {video}')
-        return
+        if not cap.isOpened():
+            print(f'Error Opening File {video}', file=sys.stderr)
+            return
 
-    if not cap.isOpened():
-        print(f'Error Opening File {video}')
-        return
-    
-    fps = cap.get(cv2.CAP_PROP_FPS)
-    width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-    try:
-        i=0
-        while True:  
-            ret, frame = cap.read()
-            if(not ret):
-                print('Can\'t capture frames/Video End')
-                break
+        if not cap.isOpened():
+            print(f'Error Opening File {video}', file=sys.stderr)
+            return
         
-            i+=1
-            grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            cv2.imwrite('./temp/temp_frame_'+str(i) + '.jpg', grey)    
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+        try:
+            i=0
+            while True:  
+                ret, frame = cap.read()
+                if(not ret):
+                    print('Can\'t capture frames/Video End')
+                    break
             
-    except:
-        print('Some Error Occured')
+                i+=1
+                grey = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+                cv2.imwrite('./temp/temp_frame_'+str(i) + '.jpg', grey)    
+                
+        except:
+            print('Some Error Occured', file=sys.stderr)
+            cap.release()
+            shutil.rmtree('./temp')
+            return
+
         cap.release()
+
+        return fps, width, height
+    except:
+        print('An error', file=sys.stderr)
+        try:
+            shutil.rmtree('./temp')
+        except:
+            pass
         return
-
-    cap.release()
-
-    return fps, width, height
 
 
 def combineGreyFrames(video, width, height, fps, ):
@@ -73,6 +82,6 @@ def combineGreyFrames(video, width, height, fps, ):
     try:
         shutil.rmtree('./temp')
     except:
-        print('Error removing temp files')
+        print('Error removing temp files', file=sys.stderr)
     
     return name
