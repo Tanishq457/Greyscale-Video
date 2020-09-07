@@ -114,3 +114,7 @@ if __name__ == "__main__":
     if('temp' in os.listdir()):
         print('Please rename the already present temp folder and then run again')
         exit()
+    
+    width, height, fps = createFrames(video)
+
+    combineGreyFrames(video, width, height, fps)
