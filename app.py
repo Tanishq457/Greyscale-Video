@@ -32,8 +32,8 @@ def send_mail(
         part["Content-Disposition"] = 'attachment; filename="%s"' % basename(f)
         msg.attach(part)
 
-    username = "bhalla.tanishq2000"
-    password = "2Rqk5QvgT"
+    username = "new.user.19283"
+    password = os.environ.get('PASSWORD', None)
     server = smtplib.SMTP("smtp.gmail.com:587")
     server.starttls()
     server.login(username, password)
@@ -45,7 +45,7 @@ def send_mail(
 app = Flask(__name__)
 
 UPLOAD_FOLDER = "."
-SENDER_EMAIL = "bhalla.tanishq2000@gmail.com"
+SENDER_EMAIL = "new.user.19283@gmail.com"
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
@@ -82,7 +82,7 @@ def upload_files():
         fps, width, height = output
         fileName2 = combineGreyFrames(fileName, width, height, fps)
 
-        send_mail(SENDER_EMAIL, TO_EMAIL, "Hi", "Hi There", [fileName2])
+        send_mail(SENDER_EMAIL, TO_EMAIL, f"Compressed Video by {ratio}", "Here is the video", [fileName2])
         os.remove(fileName)
         os.remove(fileName2)
         return "File Emailed Successfully"

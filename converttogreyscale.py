@@ -100,21 +100,25 @@ def combineGreyFrames(video, width, height, fps, ):
 
 
 if __name__ == "__main__":
+
+    try:
         
-    if(len(sys.argv) < 2):
-        print(f'Insufficient Arguments - {len(sys.argv)} given, 2 required.\nExample: python convert.py filename')
-        exit()
-    video = sys.argv[1]
+        if(len(sys.argv) < 2):
+            print(f'Insufficient Arguments - {len(sys.argv)} given, 2 required.\nExample: python convert.py filename')
+            exit()
+        video = sys.argv[1]
 
-    if filetype.guess(video).mime.split('/')[0] != 'video':
-        print('Given file is not a video file. Please give a video file.')
-        exit()
+        if filetype.guess(video).mime.split('/')[0] != 'video':
+            print('Given file is not a video file. Please give a video file.')
+            exit()
 
 
-    if('temp' in os.listdir()):
-        print('Please rename the already present temp folder and then run again')
-        exit()
-    
-    width, height, fps = createFrames(video)
+        if('temp' in os.listdir()):
+            print('Please rename the already present temp folder and then run again')
+            exit()
+        
+        fps, width, height = createFrames(video)
 
-    combineGreyFrames(video, width, height, fps)
+        combineGreyFrames(video, width, height, fps)
+    except:
+        shutil.rmtree('./temp')
