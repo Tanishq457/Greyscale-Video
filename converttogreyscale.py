@@ -1,7 +1,19 @@
 import cv2 
 import numpy as np
-import sys, importlib, os, glob, shutil, filetype , sys
+import sys, importlib, os, glob, shutil, sys
 
+if __name__ == "__main__":
+    try:
+        spam_spec = importlib.util.find_spec("filetype")
+        if spam_spec is None:
+            raise(Exception)
+        
+
+    except:
+        print('This program requires filetype package to run. Please install it through: \npip install filetype')
+        exit()
+
+import filetype
 
 def createFrames(video):
     try:
@@ -85,3 +97,20 @@ def combineGreyFrames(video, width, height, fps, ):
         print('Error removing temp files', file=sys.stderr)
     
     return name
+
+
+if __name__ == "__main__":
+        
+    if(len(sys.argv) < 2):
+        print(f'Insufficient Arguments - {len(sys.argv)} given, 2 required.\nExample: python convert.py filename')
+        exit()
+    video = sys.argv[1]
+
+    if filetype.guess(video).mime.split('/')[0] != 'video':
+        print('Given file is not a video file. Please give a video file.')
+        exit()
+
+
+    if('temp' in os.listdir()):
+        print('Please rename the already present temp folder and then run again')
+        exit()
